@@ -116,11 +116,14 @@ Arduino memory size limits are always a problem.
 
 MS5611 library returning NULL for a float on invalid data got me in a big way. Note that [MS561101BA_altitude.pde](https://github.com/PaulStoffregen/FreeIMU/blob/master/libraries/MS561101BA/examples/MS561101BA_altitude/MS561101BA_altitude.pde) does NOT check for NULL return values as [MS561101BA_simple.pde](https://github.com/PaulStoffregen/FreeIMU/blob/master/libraries/MS561101BA/examples/MS561101BA_simple/MS561101BA_simple.pde) does. Those NULL values messed up the Kalman filtering code and shortcircuited simple float calculation (foo - NULL = 0.0).
 
-TODO & enhancements:
+TODO & enhancements
+-------------------
+
 * check TinyFAT
 * change LCD for a BlueTooth connection to a smartphone app (don't have one at the moment)
 * LiPo for power source
 * PCB
 
-** See more notes on building in image captions **
+**See more notes on building in image captions**
+
 
