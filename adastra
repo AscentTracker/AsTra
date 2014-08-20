@@ -128,7 +128,7 @@ foreach my $climber (sort keys %climbers) {
 
     # make directory for each climber
     my $dir="www/$climber";
-    mkpath($dir) or die "Cannot make directory $dir\n";
+    mkpath($dir); # no error if created already
 
     # link to a .htaccess that tidies up the directory listing (Apache www server)
     symlink("../htaccess","$dir/.htaccess");    
@@ -153,17 +153,21 @@ foreach my $climber (sort keys %climbers) {
     open(HTML, ">$htmlfile") or die "Cannot write $htmlfile\n";
 
     my $stats="&tr=".$totals{$climber}{'routes'}."&td=".$totals{$climber}{'duration'}."&ta=".$totals{$climber}{'maxaltsum'};
+
+    print "$date $location $climber ".$totals{$climber}{'routes'}." ascents\n";
     
     print HTML <<EoT;
 <html xmlns="http://www.w3.org/1999/xhtml">    
-        <head>      
-          <title></title>      
-          <meta http-equiv="refresh"
-      content="0;URL='../show.html?file=$climber/$date.csv&date=$date&climber=$climber$stats&loc=$location'" />
-        </head>    
-        <body> 
-        </body>  
-      </html>
+ <head>      
+ <title></title>
+  <!-- Change charset to utf-8 if needed by the www server setup  :) -->      
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />     
+ <meta http-equiv="refresh"
+   content="0;URL='../show.html?file=$climber/$date.csv&date=$date&climber=$climber$stats&loc=$location'" />
+ </head>    
+ <body> 
+ </body>  
+</html>
 EoT
     close(HTML);
 };

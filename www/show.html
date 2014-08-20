@@ -3,7 +3,7 @@
 <head>
    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=EmulateIE9">
     <!--[if IE]><script src="excanvas.js"></script><![endif]-->
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    <script type="text/javascript" src="dygraph-combined.js"></script>
    <title>AsTra - Ascent Tracker data visualization</title>
 </head>
@@ -43,7 +43,7 @@ Select which ascents to show by (un)ticking the desired boxes.
 <br>Zoom: select with mouse. Unzoom: double-click.
 </p>
 
-<font size=-1><em><a href="http://pars.kuvat.fi/kuvat/AsTra?pw=AsTra">AsTra - Ascend Tracker</a> - 
+<font size=-1><em><a href="http://pars.kuvat.fi/kuvat/AsTra?pw=AsTra">AsTra - Ascent Tracker</a> - 
 &copy; Seppo Syrj&auml;nen 2014 - ascend dot tracker at gmail dot com</em></font>  
   
 </td>
@@ -74,6 +74,7 @@ function getParam ( sname )
 	temp = params[i].split("=");
 	if ( [temp[0]] == sname ) { sval = temp[1]; }
      }
+   sval=decodeURIComponent(sval);
    return sval;
 }
 

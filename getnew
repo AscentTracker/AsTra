@@ -1,4 +1,6 @@
 #!/bin/sh
 
-rsync -rv --update /home/koti/KiKaData/ .
+rsync -rv --update /home/koti/KiKaData/ data
+
+
 
