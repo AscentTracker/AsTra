@@ -1,0 +1,166 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+
+
+use JSON;
+use Date::Parse;
+use File::Touch;
+use File::Copy;
+use File::Path;
+use Data::Dumper;
+
+my $location='Salmisaari';
+my $verbose;
+
+use Getopt::Long;
+my $result = GetOptions ("location=s"   => \$location,      # string
+                         "verbose"  => \$verbose);  # flag
+
+oneDay(@ARGV);
+
+exit 0;
+
+foreach my $file (@ARGV) {   
+    # one day at a time
+    oneDay($file);
+};    
+    
+sub oneDay {
+    my @files=@_;
+
+    my %climbers;
+    my %ascends;
+    my %times;
+
+    my $labels='';
+    my $num=1;
+    my %labels;
+
+    my %totals;
+    
+    my $date;
+    
+file: foreach my $file (@files) {  
+    
+    open(IN,$file) or do {warn("Cannot read $file\n"), next};
+    my $alt=0;
+    my $line=<IN>;
+    next file unless defined $line;
+    next file unless $line =~ /file/; # skip old files
+    my %d = %{decode_json($line)};
+    # print Dumper(\%d);
+    $date=$d{date};
+    my $hhmm=join(':',(split(/:/,$d{time}))[0..1]);
+    my $timestamp=$d{date}." ".$d{time};
+    # set file date to climbing date
+    my $filetime=str2time($timestamp);
+    my $ref = File::Touch->new(time => $filetime);
+    my $count = $ref->touch($file);
+    # read data
+    # millis, raw, avg, kalman, voltage
+    # 3885,-0.07,-0.03,0.01,5.00
+    my %filesecs=();
+    my $sec=0;
+    my $maxtime=0;
+    my %thistimes=();
+    my %thisascend=();
+    my $maxalt=0;
+    my $failed="&nbsp;";
+    while (my $line=<IN>) {
+	if ($line =~ /FAILED/) {
+	    $failed='-';
+	    next;
+	};
+	my($millis,$raw,$avg,$kalman,$volts)=split(/[\,\s]+/, $line);
+	next if $kalman < 0.0;
+	next if $kalman > 20.0;
+	$sec=int($millis/500)*0.5;
+	# $thistimes{$sec}++; # collect timeslots for all datasets
+	# $thisascend{$sec}=$kalman, $maxalt=$maxalt<$kalman?$kalman:$maxalt unless $filesecs{$sec}++; # only first data for every timeslot
+	unless ($filesecs{$sec}++) { # only first data for every timeslot
+	    $thisascend{$sec}=$kalman;
+	    if ($kalman>=$maxalt) {
+		$maxalt=$kalman;
+		$maxtime=$sec;
+	    };
+	};
+    };
+    # Only ascends longer than this and higher than that are included
+    if ($sec>30 and $maxalt > 1.0) {
+	my $climber=$d{climber};
+	$climbers{$climber}++;
+	# print "$file $ftime $climber $grade\n";
+	my $grade=$d{grade};
+	my $duration=int(($maxtime/60.0));
+	# my $duration2=int(($sec/60.0));
+	my $maxalt=int($maxalt+0.5);
+	my $label="$failed$grade $hhmm+$duration&gt;$maxalt";
+	$totals{$climber}{'duration'}+=$duration;
+	$totals{$climber}{'maxaltsum'}+=$maxalt;
+	$totals{$climber}{'routes'}++;
+	$labels.= "\"$label\",";
+	push(@{$labels{$climber}},$label);
+	foreach my $sec (keys %thisascend) {	
+	    $times{$climber}{$sec}++; # collect timeslots for all datasets
+	    $ascends{$climber}{$label}{$sec}=$thisascend{$sec};
+	};
+    } else {
+	# print "Skip $sec $file\n";
+    };
+};
+
+# print "\"secs\",$labels\n";
+# print Dumper(\%climbers);      
+# print Dumper(\%times);
+# print Dumper(\%totals);
+# exit 0;
+    
+# chop($labels);
+    
+foreach my $climber (sort keys %climbers) {
+
+    # make directory for each climber
+    my $dir="www/$climber";
+    mkpath($dir);
+
+    # link to a .htaccess that tidies up the directory listing (Apache www server)
+    symlink("../htaccess","$dir/.htaccess");    
+    
+    my $csvfile="$dir/$date.csv";    
+    open(CSV, ">$csvfile") or die "Cannot write $csvfile\n";
+    my @labels=@{$labels{$climber}};
+    
+    print CSV "secs,".join(',',@labels)."\n";
+    foreach my $time (sort {$a <=> $b} keys %{$times{$climber}}) {
+	print CSV "$time";
+	foreach my $label (@labels) {
+	    my $data=$ascends{$climber}{$label}{$time} || "NaN";
+	    print CSV ",$data";
+	};
+	print CSV "\n";
+    };
+    close(CSV);
+
+    # HTML file to link to a dygraphs invocation
+    my $htmlfile="$dir/$date.html";
+    open(HTML, ">$htmlfile") or die "Cannot write $htmlfile\n";
+
+    my $stats="&tr=".$totals{$climber}{'routes'}."&td=".$totals{$climber}{'duration'}."&ta=".$totals{$climber}{'maxaltsum'};
+    
+    print HTML <<EoT;
+<html xmlns="http://www.w3.org/1999/xhtml">    
+        <head>      
+          <title></title>      
+          <meta http-equiv="refresh"
+      content="0;URL='../show.html?file=$climber/$date.csv&date=$date&climber=$climber$stats&loc=$location'" />
+        </head>    
+        <body> 
+        </body>  
+      </html>
+EoT
+    close(HTML);
+};
+
+};
