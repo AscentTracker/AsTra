@@ -1,5 +1,10 @@
 #!/usr/bin/perl
 
+# TODO:
+# -document and comment :)
+#
+#
+
 use warnings;
 use strict;
 
@@ -123,7 +128,7 @@ foreach my $climber (sort keys %climbers) {
 
     # make directory for each climber
     my $dir="www/$climber";
-    mkpath($dir);
+    mkpath($dir) or die "Cannot make directory $dir\n";
 
     # link to a .htaccess that tidies up the directory listing (Apache www server)
     symlink("../htaccess","$dir/.htaccess");    
