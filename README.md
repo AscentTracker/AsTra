@@ -124,6 +124,6 @@ TODO & enhancements
 * LiPo for power source
 * PCB
 
-**See more notes on building in image captions**
+**See more notes on building in [image captions](pars.kuvat.fi/kuvat/AsTra/?pw=AsTra)**
 
 
