@@ -15,9 +15,9 @@ Tarzan](http://www.helsinki.fi/~syrjanen/AsTra/Tarzan/2014-05-27.html)
 displays each ascent as a curve, height versus time. You can select
 which ascents are visible, zoom in with mouse etc.
 
-I will publish all software and support files in late July, 2014.
+I will publish all software and support files in August, 2014.
 
-* Contact: ascend dot tracker at gmail dot com *
+*Contact: ascend dot tracker at gmail dot com*
 
 From an idea to a wearable device
 ---------------------------------
@@ -96,16 +96,16 @@ needed but not much. My hardest build this far, using only hand tools.
 Parts list
 ----------
 
-Arduino Mini Pro 5V
-SCG MS5611 breakout
-Sparkfun Logic Level Converter
-Adafruit RTC module
-Sparkfun NCP1402-5V Step-Up Breakout
-1117T-3.3V regulator + capacitors
-Sparkfun MicroSD breakout
-2 x 16 LCD display
-buttons, resistors
-project box
+- Arduino Mini Pro 5V
+- SCG MS5611 breakout
+- Sparkfun Logic Level Converter
+- Adafruit RTC module
+- Sparkfun NCP1402-5V Step-Up Breakout
+- 1117T-3.3V regulator + capacitors
+- Sparkfun MicroSD breakout
+- 2 x 16 LCD display
+- buttons, resistors
+- project box
 
 Cost ~ 100 €, build time ~ 100 hours (includes lots of hw and sw prototyping & documentation) ;-)
 
