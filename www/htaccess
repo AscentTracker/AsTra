@@ -1,0 +1,5 @@
+IndexIgnore *.csv *.CSV ..
+IndexOrderDefault Descending Name
+IndexOptions SuppressLastModified
+ServerSignature Off
+HeaderName ../emptyheader

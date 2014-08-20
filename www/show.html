@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=EmulateIE9">
+    <!--[if IE]><script src="excanvas.js"></script><![endif]-->
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+   <script type="text/javascript" src="dygraph-combined.js"></script>
+   <title>AsTra - Ascent Tracker data visualization</title>
+</head>
+<body>
+
+    <style type="text/css">
+      .line {
+        visibility: hidden;
+        background-color: black;
+        position: absolute;
+        pointer-events: none;  /* let mouse events fall through to the chart */
+      }
+      .yline {
+        width: 100%;
+        height: 1px;
+      }
+      .xline {
+        height: 100%;
+        width: 1px;
+      }
+    </style>
+	
+<div id="dateloc"></div>
+
+<table border=0>
+<tr><td valign="top">
+
+<div id="graphdiv2"
+  style="width:600px; height:300px; position:relative;"></div>
+<p><b>Labels</b>: <em>"(-)grade
+start_time+duration_to_top_in_minutes&gt;max_altitude"</em><br>
+<font size=-1>Negative grade indicates a failed ascent.</font></p>
+
+<p>
+Select which ascents to show by (un)ticking the desired boxes.
+<br>Hover the mouse over curves to show and highlight height at that time.
+<br>Zoom: select with mouse. Unzoom: double-click.
+</p>
+
+<font size=-1><em><a href="http://pars.kuvat.fi/kuvat/AsTra?pw=AsTra">AsTra - Ascend Tracker</a> - 
+&copy; Seppo Syrj&auml;nen 2014 - ascend dot tracker at gmail dot com</em></font>  
+  
+</td>
+<td valign="top">
+<input type=checkbox id='toggleall' checked onClick="toggleAll(this);">
+<b>Show all</b>
+<div id="selectors"></div>
+</td>
+<td valign="top">
+<b>&nbsp;</b>
+<div id="labels"></div>
+</td>
+</tr>
+</table>
+ 
+  
+<script type="text/javascript">
+
+// return a parameter value from the current URL
+function getParam ( sname )
+{
+  var params = location.search.substr(location.search.indexOf("?")+1);
+    var sval = "";
+   params = params.split("&");
+   // split param and value into individual pieces
+   for (var i=0; i<params.length; i++)
+     {
+	temp = params[i].split("=");
+	if ( [temp[0]] == sname ) { sval = temp[1]; }
+     }
+   return sval;
+}
+
+  var csvfile=getParam('file');
+  var climber=getParam('climber');
+  var loc=getParam('loc');
+     if (loc=='') {
+      loc='Salmisaari';
+     };
+  var stats=''+ 
+  	getParam('tr')+' ascents, '+ 
+	getParam('td')+' minutes, '+
+  	getParam('ta')+' meters';
+  var date=getParam('date');
+
+  // document.getElementById('legend').innerHTML=climber+' in '+date+':';
+
+  g2 = new Dygraph(
+    document.getElementById("graphdiv2"),
+    csvfile, // path to CSV file
+    {
+//	title: 'Ascents by '+climber+' in '+date+ ' ' + stats,
+//	title: stats,
+        ylabel: 'Height (m)',
+	xlabel: 'Time (s)',
+        legend: 'always',
+        labelsDivStyles: { 'textAlign': 'right' },
+        labelsSeparateLines: true,
+        yAxisLabelWidth: 42,
+	 
+	 // showLabelsOnHightlight: true,
+	 
+	 labelsDiv: "labels",
+	 labelsDivWidth: 120,
+ /*	 
+	 labelsDivStyles: {
+	    'backgroundColor': 'rgba(200, 200, 255, 0.75)',
+	      'padding': '4px',
+	      'border': '1px solid black',
+	      'borderRadius': '10px',
+	      'boxShadow': '4px 4px 4px #888'
+	 },
+  */
+//	highlightCircleSize: 2,
+//        strokeWidth: 1,
+//        strokeBorderWidth: 1,
+          highlightSeriesOpts: {
+            strokeWidth: 2,
+            strokeBorderWidth: 1,
+            highlightCircleSize: 3
+	  }
+       
+	}          // options
+  );
+
+
+ document.getElementById('dateloc').innerHTML = '<h3>' +
+ 	'Ascents by '+climber+' in '+date+ ' @ ' + loc + ':<br>' + stats
+	+ '</h3>';
+
+function setStatus() {
+	// console.log(g2);	  
+	document.getElementById("visibility").innerHTML =
+       		g2.visibility().toString();  	   
+}				 
+
+function change(el) {
+	// console.log(parseInt(el.id));
+	// console.log(el.checked);
+	// console.log(el);
+	g2.setVisibility(parseInt(el.id), el.checked);
+	// setStatus();
+}
+
+
+function toggleAll(box) {
+   setting=box.checked;
+   
+   var headings=g2.getLabels();
+   // remove timestamp column
+   headings.splice(0,1);
+   for( i in headings) {
+      g2.setVisibility(i, setting);
+      box = document.getElementById(i);
+      // if (box.type == 'checkbox') {
+	 box.checked = setting;
+      // };
+   };
+   // setStatus();
+};
+
+function setSelectors(g, headings){
+	// remove timestamp column
+	headings.splice(0,1);
+	for( i in headings) {
+	   // console.log(i);
+	   // temp = headings[i].split(" ");
+	   // var lbl=temp[0];
+	   var lbl=headings[i];
+	   // console.log(lbl);
+	   document.getElementById('selectors').innerHTML +=
+	     '<input type=checkbox id="'+i+'" checked onClick="change(this)">'+
+	     '<label for="'+i+'"> '+lbl+'</label><br/>';
+	}
+};
+
+// wait until graph has finished drawing..
+setTimeout(function() {setSelectors(g2, g2.getLabels())}, 600);
+
+// setTimeout(toggleAll, 2000);
+
+// console.log('ok2');
+
+		
+</script>
+</body>
+</html>
