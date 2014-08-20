@@ -17,4 +17,5 @@ versus time. You can select which ascents are visible, zoom in with
 mouse etc.
 
 
-*Contact: ascend dot tracker at gmail dot com
+
+*Contact: ascend dot tracker at gmail dot com*
