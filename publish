@@ -1,0 +1,10 @@
+#!/bin/sh
+
+rsync -avz --progress  -e ssh www/* you@there/dir/AsTra
+
+
+
+
+
+
+
