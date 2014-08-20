@@ -1,19 +1,10 @@
 # # comments
 # n Number of climbers
-n 9
+n 2
 # c Climber names
-c Seppo
-c Otso
-c Niko
-c Kirsi
-c Heikki
-c Kimmo
-c Mari
 c Tarzan
 c Jane
 # b Beeper level
 b 1
-# a Auto start/stop
-a 1
 # k Kalman_r
 k 80
