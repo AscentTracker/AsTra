@@ -1,0 +1,49 @@
+#!/usr/bin/perl
+
+# Sets JSON "location" field to climbing location
+
+use warnings;
+use strict;
+
+my $defaultlocation='Salmisaari';
+my $location=$defaultlocation;
+my $verbose=0;
+my $force=0;
+
+use Getopt::Long;
+my $result = GetOptions ("location=s"   => \$defaultlocation,      # string
+                         "force"  => \$force,  # flag
+                         "verbose"  => \$verbose);  # flag
+
+
+file: foreach my $file (@ARGV) {   
+    
+    open(IN,$file) or do {warn("Cannot read $file: $!\n"), next};
+    my $line=<IN>;
+    next file unless defined $line;
+    next file unless $line =~ /file/; # skip old version files
+    
+    open(OUT, ">$file.new") or die("Cannot write $file.new: $!\n");
+        
+    $location=$defaultlocation;
+
+    # add location if not present or forced
+    if ($line =~ /"file":/ and ($line !~ /"location":/ or $force)) {
+	$line =~ s/, "location":".+?"//g; # remove old
+	$line =~ s/ \}\s*$/, "location":"$location" \}\n/;
+	print "$file $location\n" if $verbose;
+    };
+    
+    # write out new modifiled first JSON line
+    print OUT $line;
+    
+    # copy rest of file
+    while (<IN>) {
+	print OUT;
+    };
+    close(OUT) or die "Error in closing $file.new: $!\n";
+    close(IN) or die "Error in closing $file: $!\n";
+
+    rename("$file.new",$file) or die "Could not rename $file.new to $file: $!\n";
+    
+};
