@@ -16,6 +16,6 @@ displays each ascent as a curve, height versus time. You can select
 which ascents are visible, zoom in with mouse etc.
 
 **More documentation on design and building AsTra can be found 
-in [image library](pars.kuvat.fi/kuvat/AsTra/?pw=AsTra)**
+in [image library](http://pars.kuvat.fi/kuvat/AsTra/?pw=AsTra)**
 
 *Contact: ascend dot tracker at gmail dot com*
