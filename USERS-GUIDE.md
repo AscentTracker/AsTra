@@ -3,15 +3,16 @@ AsTra
 
 Basics
 ------
--turn on with power switch, wait 10 seconds for startup/calibration
--silent mode (no beeps): press any button when powering on 
+
+- turn on with power switch, wait 10 seconds for startup/calibration
+- silent mode (no beeps): press any button when powering on 
  or set "b 0" in settings.txt on SD card
--select grade with Up/Down buttons (?,4,4+,5a,5a+,...9c+)
--select climber with Set-button (on left edge next to power switch)
--start climbing with Go-button
--end climbing with Go-button (finished) or Set-button (failed to
+- select grade with Up/Down buttons (?,4,4+,5a,5a+,...9c+)
+- select climber with Set-button (on left edge next to power switch)
+- start climbing with Go-button
+- end climbing with Go-button (finished) or Set-button (failed to
  finish). Totals (altitude and seconds) are displayed until Go is pushed.
--auto poweroff after 10 minutes of idle (set "s 0" in settings.txt to disable)
+- auto poweroff after 10 minutes of idle (set "s 0" in settings.txt to disable)
 
 Display
 -------
@@ -39,7 +40,7 @@ Stop:
  Left | Middle | Right
  ---- | -------| -----
  Route grade | END | Climber name
- Max altitude | Time to max alt
+ Max altitude | | Time to max alt
 
 Data
 ----
@@ -62,13 +63,13 @@ also to _adastra_.
 
 CSV fields are as follows (most used for debugging):
 
--milliseconds from start
--raw altitude from the sensor (based on starting temperature)
--moving average of altitude
--kalman filtered altitude: only this is used by adastra
--power supply voltage
--altitude based on current temperature
--current temperature
+- milliseconds from start
+- raw altitude from the sensor (based on starting temperature)
+- moving average of altitude
+- kalman filtered altitude: only this is used by adastra
+- power supply voltage
+- altitude based on current temperature
+- current temperature
 
 AsTra stores four (4) records every second, _adastra_ displays two of
 them.
