@@ -1,25 +1,27 @@
-AsTra
-=====
+AsTra Users Guide
+=================
 
 Basics
 ------
 
-- turn on with power switch, wait 10 seconds for startup/calibration
-- silent mode (no beeps): press any button when powering on 
+- Turn on with power switch, wait 10 seconds for startup/calibration
+- Silent mode (no beeps): press any button at poweron 
  or set "b 0" in settings.txt on SD card
-- select grade with Up/Down buttons (?,4,4+,5a,5a+,...9c+)
-- select climber with Set-button (on left edge next to power switch)
-- start climbing with Go-button
-- end climbing with Go-button (finished) or Set-button (failed to
+- Select grade with Up/Down buttons (?,4,4+,5a,5a+,...9c+)
+- Select climber with Set-button (on left edge next to power switch)
+- Start climbing with Go-button: clock starts ticking, three beeps
+played and GO! displayed
+- End climbing with Go-button (finished) or Set-button (failed to
  finish). Totals (altitude and seconds) are displayed until Go is pushed.
-- auto poweroff after 10 minutes of idle (set "s 0" in settings.txt to disable)
+- Auto poweroff after 10 minutes of idle (set "i 0" in settings.txt to disable)
 
 Display
 -------
 
-Two row LCD displays the following information.
+The two row LCD displays the following information.
 
-Poweron: AsTra version information and battery voltage.
+At Power on:
+ AsTra version information and battery voltage.
 
 Idle: 
 
@@ -57,11 +59,11 @@ First line has metadata in JSON-format, rest of the lines have
 altitude etc data for the ascent in CSV format.
 Line "#FAILED" indicates an ascent that has been marked as failed by the Set-button.
 
-AsTra does not record any location information. Location is added to
+AsTra does not record location information. Location is added to
 JSON metadata with _setloc_ utility. It can be specified on command line
 also to _adastra_.
 
-CSV fields are as follows (most used for debugging):
+CSV fields are as follows (mostly used for debugging):
 
 - milliseconds from start
 - raw altitude from the sensor (based on starting temperature)
