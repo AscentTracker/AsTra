@@ -2,16 +2,18 @@
 
 tmp=`tempfile`
 
-loc=$1
-defloc="Salmisaari"
+mountpoint="/home/koti/KiKaData/"
 
+loc="$1"
+defloc="Salmisaari"
 ask=0
+
 if [ "x$loc" = "x" ]; then
 	loc=$defloc
 	ask=1
 fi
 
-rsync -rv --update /home/koti/KiKaData/ data | fgrep -i .csv > $tmp
+rsync -rv --update "$mountpoint" data | fgrep -i .csv > $tmp
 
 cd data
 
@@ -44,7 +46,6 @@ if [ -s $tmp ]; then
 	
 	../adastra -v `cat $tmp`
 fi
-
 
 rm -f $tmp
 
