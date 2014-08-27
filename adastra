@@ -2,15 +2,12 @@
 
 # TODO:
 # -document and comment :)
-#
-#
+# -parameters for time and altitude cutoff values
 
 use warnings;
 use strict;
 
-
 use utf8;
-
 use JSON;
 use Date::Parse;
 use File::Touch;
@@ -19,29 +16,36 @@ use File::Path;
 use Data::Dumper;
 use Encode;
 
-my $verbose;
+my $verbose=0;
+my $force=0;
+my $defaultlocation='Salmisaari';
 
 use Getopt::Long;
-my $result = GetOptions (
+my $result = GetOptions ("location=s"   => \$defaultlocation,      # string
+                         "force"  => \$force,  # flag
                          "verbose"  => \$verbose);  # flag
 
 my %sessionfiles;
 
-# group session files for each day
+# Collect session files for each day
 foreach my $file (sort @ARGV) {    
-    if ($file =~ /(\d\d\d\d\d\d)\w\w.CSV$/i) {
+    if ($file =~ /(\d\d\d\d\d\d)\w\w\.CSV$/i) {
 	my $day=$1;
 	push(@{$sessionfiles{$day}},$file);
     };
 };    
 
-# process each days worth of climbing sessions
+# Process each days worth of climbing sessions
 foreach my $day (sort keys %sessionfiles) {
     # print "$day ". join(' ',@{$sessionfiles{$day}})."\n";    
     oneSession(@{$sessionfiles{$day}});
 };
 
 exit 0;
+
+#
+# 
+#
 
 sub oneSession {
     my @files=@_;
@@ -70,7 +74,7 @@ file: foreach my $file (@files) {
 
     print "Reading file $file\n" if $verbose;
     
-    # force? correct encoding
+    # Force? correct encoding
     $line=encode_utf8($line);
     
     my %d = %{decode_json($line)};
@@ -81,12 +85,16 @@ file: foreach my $file (@files) {
     my $timestamp=$d{date}." ".$d{time};
     $location=$d{location};
 
+    if (not $location and $defaultlocation) {
+	$location=$defaultlocation;
+    };
+    
     unless ($location) {
-	print "No location in $file\n";
+	print "No location in $file nor command line. Use ./adastra -location 'Nuuksio' ...\n";
 	next file;
     };
     
-    # read data
+    # Read CSV data, four records per second
     # millis, raw, avg, kalman, voltage, ...
     # 3885,-0.07,-0.03,0.01,5.00, ...
     my %filesecs=();
@@ -97,50 +105,59 @@ file: foreach my $file (@files) {
     my $maxalt=0;
     my $failed="&nbsp;";
     while (my $line=<IN>) {
-	next if $line =~ /^#/;
-	if ($line =~ /FAILED/) {
+	if ($line =~ /FAILED/) { # special #comment to indicate failed ascent 
 	    $failed='-';
 	    next;
 	};
-	my($millis,$raw,$avg,$kalman,$volts)=split(/[\,\s]+/, $line);
-	next if $kalman < 0.0;
-	next if $kalman > 20.0;
+	next if $line =~ /^#/; # skip other comments
+	# CSV fields as of AsTra version 1.*, see USER-GUIDE.md for documentation
+	my($millis,$raw,$avg,$kalman,$volts,$alt_current_temperature,$temperature)=split(/[\,\s]+/, $line);
+	# Use Kalman-filtered value for altitude (other choices being raw, avg, alt_curr_temp)
+	my $altitude=$kalman;
+	# Filter unwanted/unrealistic values 
+	next if $altitude < 0.0;
+	next if $altitude > 200.0;	
+	# Timeslot=0.5 seconds
 	$sec=int($millis/500)*0.5;
-	# $thistimes{$sec}++; # collect timeslots for all datasets
-	# $thisascend{$sec}=$kalman, $maxalt=$maxalt<$kalman?$kalman:$maxalt unless $filesecs{$sec}++; # only first data for every timeslot
-	unless ($filesecs{$sec}++) { # only first data for every timeslot
-	    $thisascend{$sec}=$kalman;
-	    if ($kalman>=$maxalt) {
-		$maxalt=$kalman;
+	unless ($filesecs{$sec}++) { # Only first data for every timeslot
+	    $thisascend{$sec}=$altitude;
+	    # Find max altitude and when it happened
+	    if ($altitude>=$maxalt) {
+		$maxalt=$altitude;
 		$maxtime=$sec;
 	    };
 	};
     };
     close(IN);
     
-    # For filesystem convenience: set file date to climbing date
+    # For filesystem convenience: set CSV file date to climbing date
     my $filetime=str2time($timestamp);
     my $ref = File::Touch->new(time => $filetime);
     my $count = $ref->touch($file);
         
     # Only ascends longer than this and higher than that are included
     if ($sec>30 and $maxalt > 1.0) {
-	my $climber=$d{climber};
-	$climbers{$climber}++;
-	
-	$locations{$climber}{$location}++;
-    	
-	# print "$file $ftime $climber $grade\n";
 	my $grade=$d{grade};
+	my $climber=$d{climber};
+	$climbers{$climber}++;	
+	$locations{$climber}{$location}++;    	
+	# print "$file $ftime $climber $grade\n";
+	
 	my $duration=int(($maxtime/60.0));
 	# my $duration2=int(($sec/60.0));
-	my $maxalt=int($maxalt+0.5);
+	my $maxalt=int($maxalt+0.5); # round up
+	
+	# Label for dygraph data set: fail status, grade, time+duration>max_altitude
 	my $label="$failed$grade $hhmm+$duration&gt;$maxalt";
+	# Totals for climber & location
 	$totals{$climber}{$location}{'duration'}+=$duration;
 	$totals{$climber}{$location}{'maxaltsum'}+=$maxalt;
 	$totals{$climber}{$location}{'routes'}++;
-	# $labels{$location}.= "\"$label\",";
+	
+	# Ascents for climber & location
 	push(@{$labels{$climber}{$location}},$label);
+	
+	# Altitude values for every timeslot for this climber & location & ascent
 	foreach my $sec (keys %thisascend) {	
 	    $times{$climber}{$location}{$sec}++; # collect timeslots for all datasets
 	    $ascends{$climber}{$location}{$label}{$sec}=$thisascend{$sec};
@@ -150,36 +167,48 @@ file: foreach my $file (@files) {
     };
 };
 
-# print "\"secs\",$labels\n";
 # print Dumper(\%climbers);      
 # print Dumper(\%times);
 # print Dumper(\%totals);
 # print Dumper(\%labels);
 # print Dumper(\%locations);
 # exit 0;
+
     
-# chop($labels);
+# Data are collected, now produce HTML files for every day, climber & location
     
 foreach my $climber (sort keys %climbers) {
 
     # make directory for each climber
     my $dir="www/$climber";
-    mkpath($dir); # no error if created already
+    mkpath($dir); # give no error if created already
 
-    # link to a .htaccess that tidies up the directory listing (Apache www server)
-    symlink("../htaccess","$dir/.htaccess");    
+    # Link to a .htaccess that tidies up the directory listing (Apache www server trick)
+    symlink("../htaccess","$dir/.htaccess"); # replace with File::Copy if symlink not available in you OS
 
+  # Loop over locations for this climber
   foreach my $location (sort keys %{$locations{$climber}}) {  
-    
+
+    # Data for dygraphs are written to a CSV file, one file per climber&day&location.
+      
     my $locf=$location; # make a filesystem safe location name
     $locf =~ s/\s/_/g; # spaces to underlines
-    $locf =~ s/[^A-Za-z]/\-/g; # other non-word characters to hyphens
+    $locf =~ s/[^A-Za-z_]/\-/g; # other non-word characters to hyphens
+      
     my $csvfile="$dir/$date-$locf.csv";
-    # print "$locf\n";
     open(CSV, ">$csvfile") or die "Cannot write $csvfile\n";
-    my @labels=@{$labels{$climber}{$location}};
-    
+        
+    # Each ascent is a separate column (dataset) in CSV file.  
+    # CSV has to have an altitude value for every ascent for every timeslot, so
+    # ascents with no data for that timeslot have "NaN" as altitude value.
+    # The longest ascent determines the number of timeslots.
+    # See http://dygraphs.com/tests/missing-data.html
+           
+    # Print column names = ascent labels
+    my @labels=@{$labels{$climber}{$location}};    
     print CSV "secs,".join(',',@labels)."\n";
+      
+    # Print out altitude values for each timeslot & ascent.
     foreach my $time (sort {$a <=> $b} keys %{$times{$climber}{$location}}) {
 	print CSV "$time";
 	foreach my $label (@labels) {
@@ -190,32 +219,34 @@ foreach my $climber (sort keys %climbers) {
     };
     close(CSV);
 
-    # HTML file to link to a dygraphs invocation
+    # Write an HTML file to redirect to a dygraphs invocation (show.html) with URL parameters
     my $htmlfile="$dir/$date-$locf.html";
     open(HTML, ">$htmlfile") or die "Cannot write $htmlfile\n";
 
+    # Use URL parameters to specify climber&location etc metadata      
     my $stats="&tr=".$totals{$climber}{$location}{'routes'}."&td=".$totals{$climber}{$location}{'duration'}."&ta=".$totals{$climber}{$location}{'maxaltsum'};
-
-    print "$date $location $climber ".$totals{$climber}{$location}{'routes'}." ascents\n";
-    
+      
     print HTML <<EoT;
 <html xmlns="http://www.w3.org/1999/xhtml">    
  <head>      
  <title></title>
-  <!-- Change charset to utf-8 if needed by the www server setup  :) -->      
- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />     
+  <!-- Change charset to utf-8 if needed by the WWW server setup  :) -->      
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
  <meta http-equiv="refresh"
-   content="0;URL='../show.html?file=$climber/$date-$locf.csv&date=$date&climber=$climber$stats&loc=$location'" />
+   content="0;URL='../show.html?file=$climber/$date-$locf.csv&date=$date&climber=$climber&loc=$location$stats'" />
  </head>    
  <body> 
  </body>  
 </html>
 EoT
     close(HTML);
+
+    # Show totals for each climber & location
+    print "$date $location $climber ".$totals{$climber}{$location}{'routes'}." ascents\n";
+
+  }; # location loop        
+ }; # climber loop
+
 };
 
-  }; # location loop  
-    
-    
-}; # climber loop
 
