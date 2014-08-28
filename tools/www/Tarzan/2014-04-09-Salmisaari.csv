@@ -1,4 +1,4 @@
-secs,&nbsp;4 12:28+1&gt;1,&nbsp;4 12:34+2&gt;2,&nbsp;4 14:24+6&gt;2,&nbsp;4 17:43+0&gt;2,&nbsp;9c+ 18:19+0&gt;13,&nbsp;9c+ 18:20+0&gt;6,&nbsp;9a 18:23+22&gt;4
+secs,&nbsp;4 12:28+1&gt;1,&nbsp;4 12:34+2&gt;2,&nbsp;4 14:24+6&gt;2,&nbsp;4 17:43+0&gt;2,&nbsp;9c+ 18:19+0&gt;13,&nbsp;9c+ 18:20+0&gt;24,&nbsp;9a 18:23+26&gt;26
 0,NaN,NaN,0.00,NaN,NaN,NaN,NaN
 1,NaN,0.00,0.00,0.00,0.00,0.00,0.00
 1.5,NaN,0.00,0.00,0.00,0.00,0.00,0.00
@@ -115,7 +115,7 @@ secs,&nbsp;4 12:28+1&gt;1,&nbsp;4 12:34+2&gt;2,&nbsp;4 14:24+6&gt;2,&nbsp;4 17:4
 57,0.83,1.28,1.09,1.52,11.63,5.50,NaN
 57.5,0.79,1.27,1.11,1.46,11.40,5.49,NaN
 58,0.74,1.25,1.12,1.39,11.28,5.47,NaN
-58.5,0.70,1.25,1.13,1.34,11.02,NaN,NaN
+58.5,0.70,1.25,1.13,1.34,11.02,23.93,NaN
 59,0.64,1.26,1.15,1.27,10.77,NaN,NaN
 59.5,0.62,1.26,1.18,1.27,10.49,NaN,NaN
 60,0.60,1.28,1.24,1.28,10.22,NaN,NaN
@@ -3131,7 +3131,7 @@ secs,&nbsp;4 12:28+1&gt;1,&nbsp;4 12:34+2&gt;2,&nbsp;4 14:24+6&gt;2,&nbsp;4 17:4
 1565,NaN,NaN,0.59,NaN,NaN,NaN,3.60
 1565.5,NaN,NaN,0.57,NaN,NaN,NaN,3.60
 1566,NaN,NaN,0.58,NaN,NaN,NaN,3.60
-1566.5,NaN,NaN,0.58,NaN,NaN,NaN,NaN
+1566.5,NaN,NaN,0.58,NaN,NaN,NaN,25.56
 1567,NaN,NaN,0.59,NaN,NaN,NaN,NaN
 1567.5,NaN,NaN,0.60,NaN,NaN,NaN,NaN
 1568,NaN,NaN,0.60,NaN,NaN,NaN,NaN
@@ -5260,6 +5260,7 @@ secs,&nbsp;4 12:28+1&gt;1,&nbsp;4 12:34+2&gt;2,&nbsp;4 14:24+6&gt;2,&nbsp;4 17:4
 2630,NaN,NaN,NaN,NaN,NaN,NaN,1.51
 2630.5,NaN,NaN,NaN,NaN,NaN,NaN,1.53
 2631,NaN,NaN,NaN,NaN,NaN,NaN,1.51
+2631.5,NaN,NaN,NaN,NaN,NaN,NaN,20.61
 2645,NaN,NaN,0.01,NaN,NaN,NaN,NaN
 2645.5,NaN,NaN,0.04,NaN,NaN,NaN,NaN
 2646,NaN,NaN,0.06,NaN,NaN,NaN,NaN

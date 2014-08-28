@@ -1,0 +1,55 @@
+#!/bin/sh
+
+tmp=`tempfile`
+
+# SD card mountpoint (symlink)?
+mountpoint="/home/koti/AsTraData/"
+# Directory of CSV files
+datadir=data
+
+# Location given in command line
+loc="$1"
+defloc="Salmisaari"
+ask=0
+
+# No location on command line, ask for it
+if [ "x$loc" = "x" ]; then
+	loc=$defloc
+	ask=1
+fi
+
+# add '$datadir/' to filenames
+rsync -rv --update "$mountpoint" $datadir | fgrep -i .csv | sed "s/^/$datadir\//" > $tmp
+
+if [ -s $tmp ]; then
+
+	n=`wc -l < $tmp`
+	echo "Found $n new ascent files"
+
+	while read -r fname
+	do	
+		f=`basename $fname`
+
+		if [ "$ask" -eq 1 ]; then
+			echo
+			head -1 $fname | fmt
+			echo -n "Location of $f (ENTER=$loc, !=Set all to $loc)? "
+			read newloc < /dev/tty
+			if [ "x$newloc" = "x!" ]; then
+				ask=0
+				newloc=$loc # restore old value
+			fi
+			if [ ! "x$newloc" = "x" ]; then
+				loc=$newloc
+			fi
+		fi
+		
+		./setloc -loc "$loc" $fname
+		
+	done < $tmp
+	
+	# Process new files
+	./adastra -v `cat $tmp`
+fi
+
+rm -f $tmp

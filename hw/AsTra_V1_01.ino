@@ -1,5 +1,10 @@
 /*
 
+FIX
+-i 0 setting for idle poweroff
+-b 0 setting for mute
+
+
 20.8.2014
 
  TODO:
@@ -10,7 +15,7 @@
 Version history:
 
 0.24
- -log current temperature and temp_altitude based on it (long ascends tend to end higher than start) 
+ -log current temperature and temp_altitude based on it (long ascents tend to end higher than they started; why?) 
 
 0.23
  -auto shutoff after idle
@@ -18,7 +23,7 @@ Version history:
 1.01
  -voltage display at startup, grade 4+
 
- 
+
 */
 
 
@@ -73,8 +78,8 @@ LiquidCrystal LCD(9, 10, 5, 6, 7, 8);
 #define S_SHOW 5
 
 
-
-#define MAXGRADE 31
+// ?,4,4+,5a,5a+,...9c+
+#define MAXGRADE 32
 
 RTC_DS1307 RTC; // define the Real Time Clock object
 DateTime now;

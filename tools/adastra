@@ -1,8 +1,9 @@
 #!/usr/bin/perl
 
-# TODO:
-# -document and comment :)
-# -parameters for time and altitude cutoff values
+#
+# 
+#
+#
 
 use warnings;
 use strict;
@@ -18,12 +19,28 @@ use Encode;
 
 my $verbose=0;
 my $force=0;
+
 my $defaultlocation='Salmisaari';
+my $minsecs=30; # filter out ascents shorter than this
+my $minalt=1.0; # finter out ascents lower than this
 
 use Getopt::Long;
-my $result = GetOptions ("location=s"   => \$defaultlocation,      # string
-                         "force"  => \$force,  # flag
-                         "verbose"  => \$verbose);  # flag
+my $result = GetOptions ("location=s"   => \$defaultlocation,
+                         "timecutoff=f"  => \$minsecs, 
+                         "altcutoff=f"  => \$minalt, 
+                         "verbose"  => \$verbose); 
+
+my $usage=<<EoT;
+adastra [-loc Location] [-time time_cutoff] [-alt alt] CSV files ...
+
+Options:
+  -location: location info (overrides location in CSV files)
+  -time: only ascents longer than this (seconds)
+  -alt: only ascents higher than this (meters)
+  
+EoT
+
+die $usage unless @ARGV;
 
 my %sessionfiles;
 
@@ -136,7 +153,7 @@ file: foreach my $file (@files) {
     my $count = $ref->touch($file);
         
     # Only ascends longer than this and higher than that are included
-    if ($sec>30 and $maxalt > 1.0) {
+    if ($sec>$minsecs and $maxalt > $minalt) {
 	my $grade=$d{grade};
 	my $climber=$d{climber};
 	$climbers{$climber}++;	
@@ -144,7 +161,6 @@ file: foreach my $file (@files) {
 	# print "$file $ftime $climber $grade\n";
 	
 	my $duration=int(($maxtime/60.0));
-	# my $duration2=int(($sec/60.0));
 	my $maxalt=int($maxalt+0.5); # round up
 	
 	# Label for dygraph data set: fail status, grade, time+duration>max_altitude
@@ -163,7 +179,7 @@ file: foreach my $file (@files) {
 	    $ascends{$climber}{$location}{$label}{$sec}=$thisascend{$sec};
 	};
     } else {
-	# print "Skip $sec $file\n";
+	# print "Skip $file $sec $maxalt\n";
     };
 };
 
@@ -179,12 +195,12 @@ file: foreach my $file (@files) {
     
 foreach my $climber (sort keys %climbers) {
 
-    # make directory for each climber
-    my $dir="www/$climber";
-    mkpath($dir); # give no error if created already
+  # Make a directory for each climber
+  my $dir="www/$climber";
+  mkpath($dir); # give no error if created already
 
-    # Link to a .htaccess that tidies up the directory listing (Apache www server trick)
-    symlink("../htaccess","$dir/.htaccess"); # replace with File::Copy if symlink not available in you OS
+  # Link to a .htaccess that tidies up the directory listing (Apache www server trick)
+  symlink("../htaccess","$dir/.htaccess"); # replace with File::Copy if symlink not available in you OS
 
   # Loop over locations for this climber
   foreach my $location (sort keys %{$locations{$climber}}) {  
@@ -204,7 +220,7 @@ foreach my $climber (sort keys %climbers) {
     # The longest ascent determines the number of timeslots.
     # See http://dygraphs.com/tests/missing-data.html
            
-    # Print column names = ascent labels
+    # First line: column names = ascent labels, must be HTML for dygraphs
     my @labels=@{$labels{$climber}{$location}};    
     print CSV "secs,".join(',',@labels)."\n";
       
@@ -224,7 +240,8 @@ foreach my $climber (sort keys %climbers) {
     open(HTML, ">$htmlfile") or die "Cannot write $htmlfile\n";
 
     # Use URL parameters to specify climber&location etc metadata      
-    my $stats="&tr=".$totals{$climber}{$location}{'routes'}."&td=".$totals{$climber}{$location}{'duration'}."&ta=".$totals{$climber}{$location}{'maxaltsum'};
+    my $speed=sprintf("%0.2f", $totals{$climber}{$location}{'maxaltsum'} / $totals{$climber}{$location}{'duration'});
+    my $stats="&tr=".$totals{$climber}{$location}{'routes'}."&td=".$totals{$climber}{$location}{'duration'}."&ta=".$totals{$climber}{$location}{'maxaltsum'}."&sp=$speed";
       
     print HTML <<EoT;
 <html xmlns="http://www.w3.org/1999/xhtml">    

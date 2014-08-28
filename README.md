@@ -15,6 +15,9 @@ Tarzan](http://www.helsinki.fi/~syrjanen/AsTra/Tarzan/2014-05-27.html)
 displays each ascent as a curve, height versus time. You can select
 which ascents are visible, zoom in with mouse etc.
 
+[hw](hw) - AsTra hardware and Arduino software
+[tools](tools) - Software and tools for graphing AsTra data
+
 **More documentation on design and building AsTra can be found 
 in [AsTra image library](http://pars.kuvat.fi/kuvat/AsTra/?pw=AsTra)**
 

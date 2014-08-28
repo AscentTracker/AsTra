@@ -14,6 +14,9 @@ played and GO! displayed
 - End climbing with Go-button (finished) or Set-button (failed to
  finish). Totals (altitude and seconds) are displayed until Go is pushed.
 - Auto poweroff after 10 minutes of idle (set "i 0" in settings.txt to disable)
+- If battery voltage drops below 2.0 V a warning and voltage reading are
+  displayded until power is recycled. Exact safe lowest voltage level
+  is unknown.
 
 Display
 -------
@@ -48,12 +51,9 @@ Data
 ----
 
 Each ascent is recorded to a file on SD card (poweroff before
-removing card). Filenames are in format of 
-
- YYMMDDab.CSV
-
+removing card). Filenames are in format of  YYMMDDAA.CSV
 where YY is year (with two digits, sorry Y2K), MM is month, DD is day
-and ab goes from AA to ZZ (there is room for 625 ascents for each day).
+and AA goes from AA to ZZ (there is room for 625 ascents for each day).
 
 First line has metadata in JSON-format, rest of the lines have
 altitude etc data for the ascent in CSV format.
@@ -73,8 +73,5 @@ CSV fields are as follows (mostly used for debugging):
 - altitude based on current temperature
 - current temperature
 
-AsTra stores four (4) records every second, _adastra_ displays two of
+AsTra V 1.* stores four (4) records every second, _adastra_ displays two of
 them.
-
-
-
