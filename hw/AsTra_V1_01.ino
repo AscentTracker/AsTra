@@ -1,9 +1,9 @@
 /*
 
 FIX
--i 0 setting for idle poweroff
+-i 10 setting for idle poweroff
 -b 0 setting for mute
-
+-9c+ grade?
 
 20.8.2014
 
