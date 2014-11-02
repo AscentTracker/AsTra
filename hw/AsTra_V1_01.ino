@@ -1,9 +1,14 @@
 /*
 
+Arduino Mini Pro 5V ATmega328
+
 FIX
 -i 10 setting for idle poweroff
 -b 0 setting for mute
--9c+ grade?
+
+27.10.2014
+
++9c+ grade?
 
 20.8.2014
 
@@ -79,7 +84,7 @@ LiquidCrystal LCD(9, 10, 5, 6, 7, 8);
 
 
 // ?,4,4+,5a,5a+,...9c+
-#define MAXGRADE 32
+#define MAXGRADE 33
 
 RTC_DS1307 RTC; // define the Real Time Clock object
 DateTime now;
@@ -186,7 +191,7 @@ float k=0; //kalman gain
 #define pm PROGMEM
 
 const char MyName[]        pm ={"AsTra V: "};
-const char Version[]       pm ={"1.01"};
+const char Version[]       pm ={"1.011"};
 const char Battery[]       pm ={"Battery: "};
 const char Spaces3[]       pm ={"   "};
 const char Spaces4[]       pm ={"    "};
