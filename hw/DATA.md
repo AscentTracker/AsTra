@@ -1,5 +1,5 @@
-Data
-----
+AsTra Data
+----------
 
 Each ascent is recorded to a file on SD card (poweroff before
 removing card). Filenames are in format of YYMMDDAA.CSV
@@ -14,15 +14,16 @@ AsTra does not record location information. Location is added to
 JSON metadata with _setloc_ utility. It can be specified on command line
 also to _adastra_.
 
+AsTra V 1.* hardware stores four (4) records every second, _adastra_
+uses every other of them.
+
 CSV fields are as follows (mostly used for debugging):
 
 - milliseconds from start
-- raw altitude from the sensor (based on starting temperature)
+- raw altitude from the sensor (based on starting temperature), in meters
 - moving average of altitude
 - kalman filtered altitude: only this is used by adastra
 - power supply voltage
 - altitude based on current temperature
-- current temperature
+- current temperature, degrees of C
 
-AsTra V 1.* hardware stores four (4) records every second, _adastra_ displays two of
-them.
