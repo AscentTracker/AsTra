@@ -1,43 +1,19 @@
-AsTra Data Guide
+AsTra Data Publishing Guide
 =================
 
-You can plot AsTra CSV files in any way you want. These tools are used
-by me.
+You can plot AsTra CSV files in any way you want. These Linux flavored
+tools are used by me.
 
+Software needed:
+
+-rsync
+-Perl
 
 Tools provided:
 
-- rsync to fetch new files from SD card and publish to WWW
-- shell program to 
-- Perl programs setloc an adastra to 
+- _getnew_: shell program to fetch new files from SD card
+- _adastra_: Perl program to process CSV files to WWW reports
+- _setloc_: Perl program to set JSON location field in CSV files
+- _publish_: template shell program for publishing the results
 ...
 
-
-Data
-----
-
-Each ascent is recorded to a file on SD card (poweroff before
-removing card). Filenames are in format of  YYMMDDAA.CSV
-where YY is year (with two digits, sorry Y2K), MM is month, DD is day
-and AA goes from AA to ZZ (so there is room for 625 ascents for each day).
-
-First line has metadata in JSON-format, rest of the lines have
-altitude etc data for the ascent in CSV format.
-Line "#FAILED" indicates an ascent that has been marked as failed by the Set-button.
-
-AsTra does not record location information. Location is added to
-JSON metadata with _setloc_ utility. It can be specified on command line
-also to _adastra_.
-
-CSV fields are as follows (mostly used for debugging):
-
-- milliseconds from start
-- raw altitude from the sensor (based on starting temperature)
-- moving average of altitude
-- kalman filtered altitude: only this is used by adastra
-- power supply voltage
-- altitude based on current temperature
-- current temperature
-
-AsTra V 1.* stores four (4) records every second, _adastra_ displays two of
-them.
