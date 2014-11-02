@@ -19,7 +19,8 @@ if [ "x$loc" = "x" ]; then
 fi
 
 # add '$datadir/' to filenames
-rsync -rv --update "$mountpoint" $datadir | fgrep -i .csv | sed "s/^/$datadir\//" > $tmp
+rsync -rv --update "$mountpoint" $datadir |\
+	fgrep -i .csv | sed "s/^/$datadir\//" > $tmp
 
 if [ -s $tmp ]; then
 
@@ -49,6 +50,7 @@ if [ -s $tmp ]; then
 	done < $tmp
 	
 	# Process new files
+	echo "Processing new files with 'adastra', check directory 'www' for results"
 	./adastra -v `cat $tmp`
 fi
 
