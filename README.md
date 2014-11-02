@@ -1,3 +1,10 @@
+TODO:
+
+- document/comment adastra and other tools
+- some example files to data
+- document directory www
+
+
 AsTra
 =====
 
@@ -15,12 +22,13 @@ The [demo graph for Tarzan](http://www.helsinki.fi/~syrjanen/AsTra/Tarzan/2014-0
 displays each ascent as a curve, height versus time. You can select
 which ascents are visible, zoom in with mouse etc.
 
-AsTra has two components:
+Check these directories for more information on design and
+building the hardware and software:
 
-- [hw](hw): AsTra hardware (with Arduino software)
-- [tools](tools): Software and tools for graphing AsTra data
+- [hw](hw): AsTra hardware and Arduino software
+- [tools](tools): Linux software and tools for graphing AsTra data
 
-More documentation on design and building AsTra can be found
+Pictures and some notes on building AsTra can be found
 in [AsTra image library](http://pars.kuvat.fi/kuvat/AsTra/?pw=AsTra)
 
 *Contact: ascend dot tracker at gmail dot com*
