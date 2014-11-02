@@ -1,7 +1,7 @@
 AsTra
 =====
 
-AsTra = Ascent Tracker is an Arduino-based altitude data logger for
+Ascent Tracker "AsTra" is an Arduino-based altitude data logger for
 (indoor)climbing.
 
 AsTra is a smallish (12x6x2.5 cm, 200 g) wearable device to record
