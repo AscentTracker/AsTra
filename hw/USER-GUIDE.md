@@ -23,24 +23,24 @@ Display
 
 The two row LCD displays the following information.
 
-At Power on:
+*At Power on*:
  AsTra version information and battery voltage.
 
-Idle: 
+*Idle*: 
 
  Left | Middle | Right
  ---- | -------| -----
  Route grade | Alt zero level (blinking square) | Climber name
  Altitude| | Time
  
-Climbing:
+*Climbing*:
 
  Left | Middle | Right
  ---- | -------| -----
  Route grade | GO! | Climber name
  Altitude | |  Elapsed time
  
-Stop:
+*Stop*:
 
  Left | Middle | Right
  ---- | -------| -----

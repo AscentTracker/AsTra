@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
 #
-# 
-#
+# Reads altitude tracks from CSV files
+# Writes HTML reports for each climber and location
 #
 
 use warnings;
@@ -16,6 +16,7 @@ use File::Copy;
 use File::Path;
 use Data::Dumper;
 use Encode;
+use Getopt::Long;
 
 my $verbose=0;
 my $force=0;
@@ -24,7 +25,9 @@ my $defaultlocation='Salmisaari';
 my $minsecs=30; # filter out ascents shorter than this
 my $minalt=1.0; # finter out ascents lower than this
 
-use Getopt::Long;
+# Change charset to utf-8 if needed by the WWW server setup  :)
+my $wwwcharset="iso-8859-1";
+
 my $result = GetOptions ("location=s"   => \$defaultlocation,
                          "timecutoff=f"  => \$minsecs, 
                          "altcutoff=f"  => \$minalt, 
@@ -41,6 +44,8 @@ Options:
 EoT
 
 die $usage unless @ARGV;
+
+# ---------------------------------------------------------------
 
 my %sessionfiles;
 
@@ -61,7 +66,7 @@ foreach my $day (sort keys %sessionfiles) {
 exit 0;
 
 #
-# 
+# Process CSV files for one climbing session/location
 #
 
 sub oneSession {
@@ -112,8 +117,6 @@ file: foreach my $file (@files) {
     };
     
     # Read CSV data, four records per second
-    # millis, raw, avg, kalman, voltage, ...
-    # 3885,-0.07,-0.03,0.01,5.00, ...
     my %filesecs=();
     my $sec=0;
     my $maxtime=0;
@@ -127,14 +130,14 @@ file: foreach my $file (@files) {
 	    next;
 	};
 	next if $line =~ /^#/; # skip other comments
-	# CSV fields as of AsTra version 1.*, see USER-GUIDE.md for documentation
+	# CSV fields as of AsTra version 1.*, see DATA.md for documentation
 	my($millis,$raw,$avg,$kalman,$volts,$alt_current_temperature,$temperature)=split(/[\,\s]+/, $line);
 	# Use Kalman-filtered value for altitude (other choices being raw, avg, alt_curr_temp)
 	my $altitude=$kalman;
 	# Filter unwanted/unrealistic values 
 	next if $altitude < 0.0;
 	next if $altitude > 200.0;	
-	# Timeslot=0.5 seconds
+	# Reporting timeslot=0.5 seconds
 	$sec=int($millis/500)*0.5;
 	unless ($filesecs{$sec}++) { # Only first data for every timeslot
 	    $thisascend{$sec}=$altitude;
@@ -165,6 +168,7 @@ file: foreach my $file (@files) {
 	
 	# Label for dygraph data set: fail status, grade, time+duration>max_altitude
 	my $label="$failed$grade $hhmm+$duration&gt;$maxalt";
+	
 	# Totals for climber & location
 	$totals{$climber}{$location}{'duration'}+=$duration;
 	$totals{$climber}{$location}{'maxaltsum'}+=$maxalt;
@@ -205,8 +209,7 @@ foreach my $climber (sort keys %climbers) {
   # Loop over locations for this climber
   foreach my $location (sort keys %{$locations{$climber}}) {  
 
-    # Data for dygraphs are written to a CSV file, one file per climber&day&location.
-      
+    # Data for dygraphs are written to a CSV file, one file per climber&day&location.      
     my $locf=$location; # make a filesystem safe location name
     $locf =~ s/\s/_/g; # spaces to underlines
     $locf =~ s/[^A-Za-z_]/\-/g; # other non-word characters to hyphens
@@ -247,8 +250,7 @@ foreach my $climber (sort keys %climbers) {
 <html xmlns="http://www.w3.org/1999/xhtml">    
  <head>      
  <title></title>
-  <!-- Change charset to utf-8 if needed by the WWW server setup  :) -->      
- <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+ <meta http-equiv="Content-Type" content="text/html; charset=$wwwcharset" />
  <meta http-equiv="refresh"
    content="0;URL='../show.html?file=$climber/$date-$locf.csv&date=$date&climber=$climber&loc=$location$stats'" />
  </head>    
@@ -265,5 +267,4 @@ EoT
  }; # climber loop
 
 };
-
 

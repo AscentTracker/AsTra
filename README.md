@@ -1,10 +1,3 @@
-TODO:
-
-- document/comment adastra and other tools
-- some example files to data
-- document directory www
-
-
 AsTra
 =====
 

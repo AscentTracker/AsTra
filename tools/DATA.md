@@ -14,9 +14,6 @@ AsTra does not record location information. Location is added to
 JSON metadata with _setloc_ utility. It can be specified on command line
 also to _adastra_.
 
-AsTra V 1.* hardware stores four (4) records every second, _adastra_
-uses every other of them.
-
 CSV fields are as follows (mostly used for debugging):
 
 - milliseconds from start
@@ -27,3 +24,5 @@ CSV fields are as follows (mostly used for debugging):
 - altitude based on current temperature
 - current temperature, degrees of C
 
+AsTra V 1.* hardware stores four (4) records every second, _adastra_
+uses every other of them.
