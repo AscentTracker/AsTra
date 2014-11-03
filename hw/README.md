@@ -12,7 +12,7 @@ I was amazed by the
 by Fabio Varesano about barometric pressure sensor MS5611-01BA01. A
 resolution of a 50 cm would have been enough for logging climbing
 routes but sensitivity of just 10 centimeters was more than I could
-have hoped. Individual altitude readouts from the sensor are noisy,
+have hoped for. Individual altitude readouts from the sensor are noisy,
 but averaging and filtering saves the day.
 
 AsTra is also inspired by these projecs and tutorials:
@@ -21,7 +21,7 @@ AsTra is also inspired by these projecs and tutorials:
 * [Altduino](http://www.altduino.de/) altitude logger for model rockets
 * [openxvario](https://code.google.com/p/openxvario/) for RC planes, especially for **Kalman filtering** code
 * [Arduino DIY SD Card Logging Shield](http://www.instructables.com/id/Arduino-DIY-SD-Card-Logging-Shield/) for cheap LC Studio SD card breakout
-* [SD Cards in arduino-info](http://arduino-info.wikispaces.com/SD-Cards)
+* [SD Card info in arduino-info](http://arduino-info.wikispaces.com/SD-Cards)
 * [Why not to use 9 V batteries](http://cybergibbons.com/uncategorized/arduino-misconceptions-6-a-9v-battery-is-a-good-power-source/)
 * [Resistor ladder](http://tronixstuff.com/2011/01/11/tutorial-using-analog-input-for-multiple-buttons/) to read multiple buttons via one analog input
 * [Analog debounce](https://github.com/MatCat/AnalogDebounce) library to simpilify reading the buttons
@@ -54,7 +54,7 @@ product by
 on how to enable I2C mode and select the device address by soldering
 **two** jumper pads.
 
-SD card module from LC Studio was too big for my enclosure so I had to
+Cheap SD card module from LC Studio was too big for my enclosure so I had to
 use a MicroSD version from Sparkfun. That had the nice bonus of
 eliminating the need for a 4050 level converter.
 
@@ -68,22 +68,24 @@ connectors and to rescale some (inch-measured?) Sparkfun
 [parts](https://github.com/adafruit/Fritzing-Library/blob/master/parts/2.2%20TFT%20with%20MicroSD%20Breakout.fzpz).
 
 I happened to select a box that was just big enough for all stuff
-needed but not much. My hardest build this far, using only hand tools.
+needed. My hardest build this far, using only hand tools.
 
-Software
+Software 
 --------
 
-Program logic is implemented as a Finite State Machine (FSM, see
+Version: [AsTra_V1.0](AsTra_V1_01.ino)
+
+Program (event) logic is implemented as a Finite State Machine (FSM, see
 graph [AsTra-FSM1-1-1.png](AsTra-FSM1-1-1.png)).
 
 Sensor readings are cleaned with Kalman digital filtering. Also a
 32-slot moving average is calculated for debugging. See [DATA.md](DATA.md) for
-all calculated fields. 
+all fields. 
 
 Starting and stopping the ascent tracking automatically (as indicated
 in FSM and AUTOSTART macro in code) was more trouble than it was
-worth. One button push before and two after ascent is not too much to
-remember. 
+worth. One button push before and two after ascent is mostly not too
+much to remember. 
 
 Arduino memory size limits are always a problem: some recent change in
 Arduino IDE (Linux versions) bloated the binary over maximun size so I
@@ -99,20 +101,20 @@ does. Those NULL values messed up the Kalman filtering code and
 shortcircuited simple float calculation (foo - NULL = 0.0). Note to
 self: always check return values and read interface descriptions.
 
-Climbing grades are according to French indoor system: 4, 4+, 5a,
+Climbing grades are according to French (indoor) system: 4, 4+, 5a,
 5a+, 5b, 5b+, 5c, 5c+, 6a, 6a+,... Modify gradenum2name() to suit your
 needs.
 
 Sensor initialization and setup code is inside loop() because
-replicating it in setup() would bloat the binary. Sorry for the
+replicating them in setup() would bloat the binary. Sorry for the
 inconvenience.
 
 Static variables are used in openLog() to eliminate the need of scanning
-the SD card for next availabe filename while the power is still on.
+the SD card for the next availabe filename while the power is still on.
 
 Device is powered off after 10 minutes on inactivity. This drops the
 current consumption from 21 mA to 7 mA so this is mostly an
-excercise in power saving.
+excercise in power saving techniques.
 
 See [USER-GUIDE.md](USER-GUIDE.md) for how the device is actually used.
 
@@ -127,18 +129,20 @@ have altitude values calculated based on starting and current
 temperature (see [DATA.md](DATA.md)) but I have not managed to find any
 explanation for the drift.
 
-One might use a second stationary unit for reference like differential
-GPS :-) On the other hand, the device is accurate enough for my
-current needs where a resolution of 0.5 meters would suffice.
+One might use a second stationary unit for reference like in
+differential GPS :-) On the other hand, the device is accurate enough
+for my current needs where a resolution of 0.5 meters would suffice.
 
-Alternative hw/sw designs:
+Alternative sw/hw designs:
 
-* use TinyFAT as SD library
+* use TinyFAT as SD library (partition card for smaller capacity)
 * replace AnalogDebounce with a smaller implementation
 * replace rest of printfs with smaller code
 * use I2C EEPROM chip for storage, build data download functionality
-* add a BlueTooth connection to a smartphone app
+* add a BlueTooth connection to PC/smartphone app
 * use LiPo as power source
 * PCB
 
-**See more notes on building in [image captions](pars.kuvat.fi/kuvat/AsTra/?pw=AsTra)**
+**See more notes on building in [image captions](pars.kuvat.fi/kuvat/AsTra/)**
+
+&copy; Seppo Syrjänen 2014
