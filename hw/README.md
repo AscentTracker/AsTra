@@ -74,10 +74,10 @@ Software
 --------
 
 Program logic is implemented as a Finite State Machine (FSM, see
-graph AsTra-FSM1-1-1.png).
+graph [AsTra-FSM1-1-1.png](AsTra-FSM1-1-1.png)).
 
 Sensor readings are cleaned with Kalman digital filtering. Also a
-32-slot moving average is calculated for debugging. See DATA.md for
+32-slot moving average is calculated for debugging. See [DATA.md](DATA.md) for
 all calculated fields. 
 
 Starting and stopping the ascent tracking automatically (as indicated
@@ -114,7 +114,7 @@ Device is powered off after 10 minutes on inactivity. This drops the
 current consumption from 21 mA to 7 mA so this is mostly an
 excercise in power saving.
 
-See USER-GUIDE.md for how the device is actually used.
+See [USER-GUIDE.md](USER-GUIDE.md) for how the device is actually used.
 
 Enhancements and alternatives
 -----------------------------
@@ -124,7 +124,7 @@ routes tend to end couple of meters higher than started. Possible
 causes include temperature at different altitudes, wind and changes in
 air conditioning affecting the local barometric pressure. CSV data
 have altitude values calculated based on starting and current
-temperature (see DATA.md) but I have not managed to find any
+temperature (see [DATA.md](DATA.md)) but I have not managed to find any
 explanation for the drift.
 
 One might use a second stationary unit for reference like differential
@@ -134,7 +134,7 @@ current needs where a resolution of 0.5 meters would suffice.
 Alternative hw/sw designs:
 
 * use TinyFAT as SD library
-* replace AnalogDebounce with smaller implementation
+* replace AnalogDebounce with a smaller implementation
 * replace rest of printfs with smaller code
 * use I2C EEPROM chip for storage, build data download functionality
 * add a BlueTooth connection to a smartphone app
