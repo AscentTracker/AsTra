@@ -1,10 +1,10 @@
 AsTra Data Reporting
 =================
 
-You can plot AsTra CSV files in any way you want.
-
-These Linux flavored tools produce HTML+CSV files for dygraphs.js
-visualization library and Apache flavored www server.
+You can plot AsTra CSV files in any way you want, see [DATA.md](DATA.md) for
+field information. These Linux flavored
+tools produce HTML+CSV files for [dygraphs](http://dygraphs.com/) visualization library and
+Apache flavored www server.
 
 Software needed:
 
@@ -34,7 +34,7 @@ Quick usage
 * ./publish
 
 
-You can view the reports with a modern browser in directory www.
+You can view the reports with a modern browser in directory [www](www).
 
 You can set location info to CSV files like this
 
@@ -45,4 +45,3 @@ and make reports from those files
  ./adastra -v data/140606*.CSV
 
 You can override location with adastra option -loc
-
