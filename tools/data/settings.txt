@@ -1,10 +1,15 @@
+#
+# AsTra V 1.* configuration file
+#
 # # comments
-# n Number of climbers
+# n Number of climbers, MUST be set big enough
 n 2
 # c Climber names
 c Tarzan
 c Jane
-# b Beeper level
+# b Beeper level: 0=mute, 1=enable
 b 1
-# k Kalman_r
+# i Idle sleep after n minutes
+i 10
+# k Kalman_r parameter
 k 80
