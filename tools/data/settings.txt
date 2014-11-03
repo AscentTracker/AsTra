@@ -2,7 +2,7 @@
 # AsTra V 1.* configuration file
 #
 # # comments
-# n Number of climbers, MUST be set big enough
+# n Number of climbers, MUST be set correctly
 n 2
 # c Climber names
 c Tarzan
