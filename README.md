@@ -24,4 +24,6 @@ building the hardware and software:
 Pictures and some notes on building AsTra can be found
 in [AsTra image library](http://pars.kuvat.fi/kuvat/AsTra/?pw=AsTra)
 
+&copy; Seppo Syrjänen 2014
+
 *Contact: ascend dot tracker at gmail dot com*
