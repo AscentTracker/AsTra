@@ -29,9 +29,9 @@ Install
 Quick usage
 -----------
 
-# insert SD card
-# ./getnew Location
-# ./publish
+* insert SD card
+* ./getnew Location
+* ./publish
 
 
 You can view the reports with a modern browser in directory www.
@@ -42,7 +42,7 @@ You can set location info to CSV files like this
 
 and make reports from those files
 
- ./adastra data/140606*.CSV
+ ./adastra -v data/140606*.CSV
 
-You can override location with option -loc for adastra.
+You can override location with adastra option -loc
 
