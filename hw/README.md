@@ -58,10 +58,14 @@ Cheap SD card module from LC Studio was too big for my enclosure so I had to
 use a MicroSD version from Sparkfun. That had the nice bonus of
 eliminating the need for a 4050 level converter.
 
-[Fritzing](http://fritzing.org/home/) breadboard view was a nice way
+[Fritzing](http://fritzing.org/home/) [breadboard
+view](AsTra-V0.44_bb.png) was a nice way
 to plan and document(!) wirings on a proto board. Export to a PNG and
-flip it over to give view from the solder side. Fritzing schematic view was
-used in documenting the actual circuit design.
+flip it over to give view from the solder side. Fritzing [schematic
+view](AsTra-V0.44_schem.png) was
+used in documenting the actual circuit design. Download
+[AsTra-V0.44.fzz](AsTra-V0.44.fzz) for
+complete Fritzing project.
 
 I used [Inkscape](http://www.inkscape.org/en/) to draw "parts" for the
 connectors and to rescale some (inch-measured?) Sparkfun
