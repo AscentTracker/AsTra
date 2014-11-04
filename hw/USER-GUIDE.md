@@ -12,7 +12,7 @@ Basics
 - Start climbing with Go-button: clock starts ticking, three beeps
   played and GO! displayed
 - End climbing with Go-button (finished) or Set-button (failed to
-  finish). Totals (altitude and seconds) are displayed until Go is pushed.
+  finish). Totals (altitude and seconds) and END are displayed until Go is pushed.
 - Auto poweroff after 10 minutes of idle (set "i 0" in settings.txt to disable)
 - If battery voltage drops below 2.0 V a warning and voltage reading are
   displayded until power is recycled. Exact safe lowest voltage level
