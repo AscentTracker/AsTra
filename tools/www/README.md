@@ -15,8 +15,8 @@ directory is created. Each climbing session produces two files:
  emptyheader | Apache | Hide unnecessary files
  index.html | Apache | Hide unnecessary files
  htaccess | Apache | Hide unnecessary files, symlinked to name .htaccess
- README.md | | This file
- show.html | | Report browser. CSV data and other info given as URL parameters  
+ README.md | AsTra | This file
+ show.html | AsTra | Report browser. CSV data and other info given as URL parameters  
  Tarzan | adastra | Reports for Tarzan
 
 
