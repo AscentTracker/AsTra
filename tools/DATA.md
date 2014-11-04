@@ -11,8 +11,8 @@ altitude etc data for the ascent in CSV format.
 Line "#FAILED" indicates an ascent that has been marked as failed by the Set-button.
 
 AsTra does not record location information. Location is added to
-JSON metadata with _setloc_ utility. It can be specified on command line
-also to _adastra_.
+JSON metadata with _setloc_ utility. It can also be specified on command line
+to _adastra_.
 
 CSV fields are as follows (mostly used for debugging):
 
