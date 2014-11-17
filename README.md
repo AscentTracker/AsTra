@@ -21,7 +21,7 @@ building the hardware and software:
 - [hw](hw): AsTra hardware and Arduino software
 - [tools](tools): Linux software and tools for graphing AsTra data
 
-Pictures and some notes on building AsTra can be found
+Pictures, demo video and some notes on building AsTra can be found
 in [AsTra image library](http://pars.kuvat.fi/kuvat/AsTra/?pw=AsTra)
 
 &copy; Seppo Syrjänen 2014
