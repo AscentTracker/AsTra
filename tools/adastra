@@ -242,8 +242,9 @@ foreach my $climber (sort keys %climbers) {
     my $htmlfile="$dir/$date-$locf.html";
     open(HTML, ">$htmlfile") or die "Cannot write $htmlfile\n";
 
-    # Use URL parameters to specify climber&location etc metadata      
-    my $speed=sprintf("%0.2f", $totals{$climber}{$location}{'maxaltsum'} / $totals{$climber}{$location}{'duration'});
+    # Use URL parameters to specify climber&location etc metadata
+    my $totaldur=$totals{$climber}{$location}{'duration'};
+    my $speed=$totaldur?sprintf("%0.2f", $totals{$climber}{$location}{'maxaltsum'} / $totaldur):'?';
     my $stats="&tr=".$totals{$climber}{$location}{'routes'}."&td=".$totals{$climber}{$location}{'duration'}."&ta=".$totals{$climber}{$location}{'maxaltsum'}."&sp=$speed";
       
     print HTML <<EoT;
