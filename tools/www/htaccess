@@ -1,4 +1,4 @@
-IndexIgnore *.csv *.CSV ..
+IndexIgnore *.csv *.CSV *.log *.LOG ..
 IndexOrderDefault Descending Name
 IndexOptions SuppressLastModified
 ServerSignature Off
