@@ -3,6 +3,8 @@
 #
 # Reads altitude tracks from CSV files
 # Writes HTML reports for each climber and location
+# Log format:
+# epoch date time location climber failed grade maxh maxtime
 #
 
 use warnings;
@@ -23,7 +25,7 @@ my $force=0;
 
 my $defaultlocation='Salmisaari';
 my $minsecs=30; # filter out ascents shorter than this
-my $minalt=1.0; # finter out ascents lower than this
+my $minalt=1.0; # filter out ascents lower than this
 
 # Change charset to utf-8 if needed by the WWW server setup  :)
 my $wwwcharset="iso-8859-1";
@@ -77,6 +79,8 @@ sub oneSession {
     my %times;
     my %locations;
 
+    my %loglines;
+    
     my $labels='';
     my $num=1;
     my %labels;
@@ -173,6 +177,14 @@ file: foreach my $file (@files) {
 	$totals{$climber}{$location}{'duration'}+=$duration;
 	$totals{$climber}{$location}{'maxaltsum'}+=$maxalt;
 	$totals{$climber}{$location}{'routes'}++;
+
+	# Print log
+	my $fs=$failed;
+	$fs='+' unless $fs eq '-';
+	my $l=$location;
+	$l =~ s/ /_/g;
+	$loglines{$climber}{$location}.=
+	  "$timestamp $filetime $l $climber $fs $grade $maxalt $duration\n";
 	
 	# Ascents for climber & location
 	push(@{$labels{$climber}{$location}},$label);
@@ -261,6 +273,11 @@ foreach my $climber (sort keys %climbers) {
 EoT
     close(HTML);
 
+    my $logfile="$dir/$date-$locf.log";
+    open(LOG, ">$logfile") or die "Cannot write $logfile\n";
+      print LOG $loglines{$climber}{$location};
+    close(LOG);
+      
     # Show totals for each climber & location
     print "$date $location $climber ".$totals{$climber}{$location}{'routes'}." ascents\n";
 

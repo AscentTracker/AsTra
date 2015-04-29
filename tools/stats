@@ -1,0 +1,187 @@
+#!/usr/bin/perl
+
+# Calculates monthly, yearly and total statistics from adastra log files
+
+use warnings;
+use strict;
+
+# Change charset to utf-8 if needed by the WWW server setup  :)
+my $wwwcharset="iso-8859-1";
+
+my $verbose=0;
+
+use File::Basename;
+
+use Data::Dumper;
+
+use Getopt::Long;
+my $result = GetOptions (
+    "verbose"  => \$verbose);  # flag
+
+
+my %stats;
+my %statkeys;
+my %gradekeys;
+
+
+# 2015-03-17 18:18:43 1426609123 Salmisaari/Uusi_parveke Seppo + 5c 7 2
+ 
+my $dir;
+my $Climber;
+
+
+file: foreach my $file (@ARGV) {   
+
+  $dir=dirname($file) unless $dir;
+    
+  open(IN,$file) or do {warn("Cannot read $file: $!\n"), next};
+    
+  while (my $line=<IN>) {
+      
+    our ($date, $time,$epoch, $location,$climber,$ok,$grade,$meters,$minutes)=split(/\s+/,$line);
+
+    # $grade='+' if $grade eq '?';
+      
+   $Climber=$climber unless $Climber;
+      
+    
+ sub S {     
+    my $key=shift;
+      
+    $statkeys{$key}++;
+     
+    $stats{$key}{'ascents'}++;
+    $stats{$key}{'grades'}{$grade}++;
+    $stats{$key}{'meters'}+=$meters;
+    $stats{$key}{'minutes'}+=$minutes;
+ };
+    
+      
+    my $year=substr($date,0,4);
+    my $month=substr($date,0,7);
+
+    if (($ok eq '-') or ($grade =~ /^\-/)) {
+	# print "skip: $line\n";
+	next;
+    };
+
+      $gradekeys{$grade}++;
+
+      S($year);
+      S($month);
+      S('TOTAL');
+                  
+
+    # push(@{$labels{$climber}{$location}},$label);
+
+    
+  };
+
+#    open(OUT, ">$file.new") or die("Cannot write $file.new: $!\n");
+        
+
+#     rename("$file.new",$file) or die "Could not rename $file.new to $file: $!\n";
+
+    close(IN) or die "Error in closing $file: $!\n";
+
+    
+};
+
+#    $stats{$key}{'ascents'}++;
+#    $stats{$key}{'grades'}{$grade}++;
+#    $stats{$key}{'meters'}+=$meters;
+#    $stats{$key}{'minutes'}+=$minutes;
+
+
+    my $htmlfile="$dir/Stats.html";
+    open(HTML, ">$htmlfile") or die "Cannot write $htmlfile\n";
+
+    # Use URL parameters to specify climber&location etc metadata
+      
+    print HTML <<EoT;
+<html xmlns="http://www.w3.org/1999/xhtml">    
+ <head>      
+ <title>AsTra statistics</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=$wwwcharset" />
+ </head>    
+ <body>
+  
+ <h3>AsTra statistics for $Climber</h3>
+
+ <table border=1>
+EoT
+
+
+my @gradekeys=sort keys %gradekeys;
+
+# move '?' first if exists
+my $last=pop(@gradekeys);
+if ($last eq '?') {
+    unshift(@gradekeys,$last);
+} else {
+    push(@gradekeys,$last);
+};
+
+
+# Statistic slots
+my @keylist=grep(/\-/, sort keys %statkeys);
+push(@keylist, grep(!/\-/, sort keys %statkeys));
+
+
+sub OutRec {
+  
+    my $type=shift;
+    
+    print HTML "<tr align=right>\n<$type>";
+    print HTML join("</$type><$type>", @_);
+    print HTML "</$type></tr>\n";
+    
+};
+
+
+    OutRec('th', 'Time', 'Ascents',
+	'Meters',
+	'Minutes',
+	'Speed', '&nbsp;', @gradekeys);
+
+
+foreach my $key (@keylist) {
+
+    my @gradestats;
+    
+    foreach my $g (@gradekeys) {
+	my $gcount=$stats{$key}{'grades'}{$g}|| '&nbsp;';
+	push(@gradestats,$gcount);
+    };
+    
+    # my $gradestats=join(' ', sort keys %{$stats{$key}{'grades'}});
+    
+    my $speed=$stats{$key}{'minutes'}?sprintf("%0.2f", $stats{$key}{'meters'}/$stats{$key}{'minutes'}):'?';
+    
+    OutRec('td', $key, $stats{$key}{'ascents'},
+	$stats{$key}{'meters'},
+	$stats{$key}{'minutes'},
+	$speed,'&nbsp;',
+	@gradestats);
+
+    # print $key . Dumper($stats{$key});
+    
+};    
+
+   print HTML<<EoT;
+</table>
+  
+<p>
+
+<font size=-1><em><a href="http://pars.kuvat.fi/kuvat/AsTra?pw=AsTra">AsTra - Ascent Tracker</a> - 
+&copy; Seppo Syrj&auml;nen 2015 - ascend dot tracker at gmail dot com</em></font>  
+
+</body></html>
+
+EoT
+  
+    close(HTML);
+
+# print Dumper(\%stats);
+
+

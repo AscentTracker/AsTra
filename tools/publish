@@ -1,4 +1,9 @@
 #!/bin/sh
 
+for dir in www/[A-Z]*
+do
+	./stats $dir/*.log
+done
+
 rsync -avz --progress  -e ssh www/* you@there/dir/AsTra
 
