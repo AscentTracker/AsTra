@@ -16,7 +16,7 @@ processed with a Perl program to yield daily ascent curves (with
 The [demo graph for Tarzan](http://www.helsinki.fi/~syrjanen/AsTra/Tarzan/2014-05-27.html)
 displays each ascent as a curve, height versus time. You can select
 which ascents are visible, zoom in with mouse etc. Monthy and yearly
-statistics are calculated for every climber.
+(statistics)[http://www.helsinki.fi/~syrjanen/AsTra/Tarzan/Stats.html] are calculated for every climber.
 
 Check these directories for more information on design and
 building the hardware and software:
