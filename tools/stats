@@ -50,6 +50,7 @@ file: foreach my $file (@ARGV) {
       
     $statkeys{$key}++;
      
+    $stats{$key}{'days'}{$date}++;
     $stats{$key}{'ascents'}++;
     $stats{$key}{'grades'}{$grade}++;
     $stats{$key}{'meters'}+=$meters;
@@ -139,7 +140,7 @@ sub OutRec {
 };
 
 
-    OutRec('th', 'Time', 'Ascents',
+    OutRec('th', 'Time', 'Days', 'Ascents',
 	'Meters',
 	'Minutes',
 	'Speed', '&nbsp;', @gradekeys);
@@ -154,11 +155,14 @@ foreach my $key (@keylist) {
 	push(@gradestats,$gcount);
     };
     
+    
+    my $days=scalar keys %{$stats{$key}{'days'}};
+	
     # my $gradestats=join(' ', sort keys %{$stats{$key}{'grades'}});
     
     my $speed=$stats{$key}{'minutes'}?sprintf("%0.2f", $stats{$key}{'meters'}/$stats{$key}{'minutes'}):'?';
     
-    OutRec('td', $key, $stats{$key}{'ascents'},
+    OutRec('td', $key, $days, $stats{$key}{'ascents'},
 	$stats{$key}{'meters'},
 	$stats{$key}{'minutes'},
 	$speed,'&nbsp;',
