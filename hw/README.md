@@ -77,7 +77,7 @@ needed. My hardest build this far, using only hand tools.
 Software 
 --------
 
-Version: [AsTra_V1.0](AsTra_V1_01.ino)
+Version: [AsTra_V1.06](AsTra_V1_06.ino)
 
 Program (event) logic is implemented as a Finite State Machine (FSM, see
 graph [AsTra-FSM1-1-1.png](AsTra-FSM1-1-1.png)).
@@ -105,7 +105,7 @@ does. Those NULL values messed up the Kalman filtering code and
 shortcircuited simple float calculation (foo - NULL = 0.0). Note to
 self: always check return values and read interface descriptions.
 
-Climbing grades are according to French (indoor) system: 4, 4+, 5a,
+Climbing grades are according to French (indoor) system: ?, 4, 4+, 5a,
 5a+, 5b, 5b+, 5c, 5c+, 6a, 6a+,... Modify gradenum2name() to suit your
 needs.
 
