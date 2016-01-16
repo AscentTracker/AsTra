@@ -1,5 +1,5 @@
-AsTra Users Guide
-=================
+AsTra Users Guide V1.06
+=======================
 
 Basics
 ------
@@ -9,6 +9,8 @@ Basics
  or set "b 0" in settings.txt on SD card
 - Select grade with Up/Down buttons (?,4,4+,5a,5a+,...9c+)
 - Select climber with Set-button (on left edge next to power switch)
+  Running statistis (since poweron) for each climber are displayed.
+  Press Go to select climber.
 - Start climbing with Go-button: clock starts ticking, three beeps
   played and GO! displayed
 - End climbing with Go-button (finished) or Set-button (failed to
@@ -17,6 +19,8 @@ Basics
 - If battery voltage drops below 2.0 V a warning and voltage reading are
   displayded until power is recycled. Exact safe lowest voltage level
   is unknown.
+- set "d 1" in settings.txt to enable Daylight Savings Time (no need
+  to adjust RTC)
 
 Display
 -------
@@ -40,10 +44,11 @@ The two row LCD displays the following information.
  Route grade | GO! | Climber name
  Altitude | |  Elapsed time
  
-**Stop:**
+**Select climber:**
 
  Left | Middle | Right
  ---- | -------| -----
- Route grade | END | Climber name
- Max altitude | | Time to max alt
+ Total ascents | | Climber name
+ Total meters | | Total time
+
 
