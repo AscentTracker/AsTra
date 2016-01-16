@@ -15,8 +15,9 @@ Software needed:
 *Tools provided*:
 
 - _getnew_: shell program to fetch new files from SD card, runs _adastra_
-- _adastra_: Perl program to process CSV files to WWW reports
-- _publish_: shell program for publishing the results
+- _adastra_: Perl program to process CSV files to logs and WWW reports
+- _stats_: Perl program to calculate montly and yearly statistics for every climber
+- _publish_: shell program for publishing the results, runs stats first
 - _setloc_: Perl program to set JSON location field in CSV files
 
 Install
@@ -46,4 +47,4 @@ and make reports from those files
 
 You can override location with adastra option -loc
 
-&copy; Seppo Syrjänen 2014
+&copy; Seppo Syrjänen 2014,2016
