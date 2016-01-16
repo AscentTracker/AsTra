@@ -16,9 +16,9 @@ processed with a Perl program to yield daily ascent curves (with
 The [demo graph for Tarzan](http://www.helsinki.fi/~syrjanen/AsTra/Tarzan/2014-05-27.html)
 displays each ascent as a curve, height versus time. You can select
 which ascents are visible, zoom in with mouse etc. Monthy and yearly
-(statistics)[http://www.helsinki.fi/~syrjanen/AsTra/Tarzan/Stats.html] are calculated for every climber.
+[statistics](http://www.helsinki.fi/~syrjanen/AsTra/Tarzan/Stats.html) are calculated for every climber.
 
-Check these directories for more information on design and
+Check these directories for more information on design, inspiration and
 building the hardware and software:
 
 - [hw](hw): AsTra hardware and Arduino software
@@ -27,6 +27,6 @@ building the hardware and software:
 Pictures, demo video and some notes on building AsTra can be found
 in [AsTra image library](http://pars.kuvat.fi/kuvat/AsTra/?pw=AsTra)
 
-&copy; Seppo Syrjänen 2014,2016
+&copy; Seppo Syrjänen 2014, 2016
 
 *Contact: ascend dot tracker at gmail dot com*
