@@ -147,6 +147,10 @@ Alternative sw/hw designs:
 * use LiPo as power source
 * PCB
 
-**See more notes on building in [image captions](pars.kuvat.fi/kuvat/AsTra/)**
+**See more notes on building in [image captions](http://pars.kuvat.fi/kuvat/AsTra/)**
 
-&copy; Seppo Syrjänen 2014
+Be sure to check [Climbit](http://www.instructables.com/id/Climbit/)
+for a more modern choice of components. I started AsTra when e.g. Trinket
+and OLED displays were not readily available.
+
+&copy; Seppo Syrjänen 2014,2016
