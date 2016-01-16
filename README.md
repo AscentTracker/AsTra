@@ -4,7 +4,9 @@
 Ascent Tracker "AsTra" is an Arduino-based altitude data logger for
 (indoor)climbing.
 
-AsTra is a smallish (12x6x2.5 cm, 200 g) ![wearable device](AsTra.jpg) to record
+![AsTra picture](AsTra.jpg) 
+
+AsTra is a smallish (12x6x2.5 cm, 200 g) wearable device to record
 altitude (based on barometric pressure) four times a second to an
 SD card. For convenience also time, name of the climber and grade of
 the route are selectable and stored with every ascent. The data are
