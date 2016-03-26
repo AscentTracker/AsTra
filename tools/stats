@@ -12,6 +12,11 @@ my $verbose=0;
 
 use File::Basename;
 
+use utf8;
+
+use Encode qw(encode decode);
+
+
 use Data::Dumper;
 
 use Getopt::Long;
@@ -23,15 +28,30 @@ my %stats;
 my %statkeys;
 my %gradekeys;
 
+my $epicsfile="epics.txt";
+
+my %epics;
+my @epics;
+
+open my $EPICS,'<:encoding(UTF-8)',$epicsfile or die "Cannot read $epicsfile: $!\n";
+while (<$EPICS>) {
+    chomp;
+    my ($height, $peak, $location)=split(/\t+/, $_);
+    $epics{$height}="$peak in $location";
+    push(@epics, $height);
+};
+close($EPICS);
 
 # 2015-03-17 18:18:43 1426609123 Salmisaari/Uusi_parveke Seppo + 5c 7 2
  
 my $dir;
 my $Climber;
 
+my $nextepic=shift(@epics);
+my $epictxt="";
 
 file: foreach my $file (@ARGV) {   
-
+    
   $dir=dirname($file) unless $dir;
     
   open(IN,$file) or do {warn("Cannot read $file: $!\n"), next};
@@ -71,7 +91,16 @@ file: foreach my $file (@ARGV) {
       S($year);
       S($month);
       S('TOTAL');
-                  
+    
+      if ($stats{'TOTAL'}{'meters'} > $nextepic) {	 
+	  # print $location."\n";
+	  # print encode('iso-8859-1',$location)."\n";
+	  # print encode('utf-8',$location)."\n";
+	  # $epictxt.="Epic reached $date $location: $nextepic m ".$epics{$nextepic}."<br>\n";
+	  $epictxt.="Epic reached $date: $nextepic m ".$epics{$nextepic}."<br>\n";
+	$nextepic=shift(@epics);  
+      };
+      
 
     # push(@{$labels{$climber}{$location}},$label);
 
@@ -87,6 +116,18 @@ file: foreach my $file (@ARGV) {
 
     
 };
+
+
+
+$epictxt.="<p>Epics still to be reached:<p>\n";
+
+do {
+      $epictxt.=" $nextepic m ".$epics{$nextepic}."<br>\n";
+      $nextepic=shift(@epics);
+} while ($nextepic);
+
+$epictxt=decode('utf-8',$epictxt);
+
 
 #    $stats{$key}{'ascents'}++;
 #    $stats{$key}{'grades'}{$grade}++;
@@ -176,9 +217,11 @@ foreach my $key (@keylist) {
 </table>
   
 <p>
+$epictxt
+<p>
 
 <font size=-1><em><a href="http://pars.kuvat.fi/kuvat/AsTra?pw=AsTra">AsTra - Ascent Tracker</a> - 
-&copy; Seppo Syrj&auml;nen 2015 - ascend dot tracker at gmail dot com</em></font>  
+&copy; Seppo Syrj&auml;nen 2016 - ascend dot tracker at gmail dot com</em></font>  
 
 </body></html>
 

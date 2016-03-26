@@ -1,0 +1,18 @@
+1324	Halti	Finland
+2228	Mount Kosciuszko	Australia
+3776	Mount Fuji	Japan
+4810	Mont Blanc	Europe/Alps
+4884	Puncak Jaya	Australasia/Indonesia
+4892	Mount Vinson	Antarctica
+5642	Mount Elbrus	Europe/Caucasus
+5895	Kilimanjaro	Africa
+6194	Denali/McKinley	North America
+6961	Aconcagua	South America
+8848	Mount Everest	Asia
+10200	Mauna Kea from seafloor	Hawaiji
+11000	Pavonis Mons	Mars
+13900	Elysium Mons	Mars
+17000	Bo&ouml;saule Montes	Io
+20000	Equatorial Ridge	Iapetus
+21229	Olympos Mons	Mars
+23000	Rheasilvia Mons	4 Vesta
