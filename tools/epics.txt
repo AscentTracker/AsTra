@@ -6,6 +6,7 @@
 4892	Mount Vinson	Antarctica
 5642	Mount Elbrus	Europe/Caucasus
 5895	Kilimanjaro	Africa
+6030	Tocllaraju	Peru
 6194	Denali/McKinley	North America
 6961	Aconcagua	South America
 8848	Mount Everest	Asia
